@@ -1,0 +1,26 @@
+on: push
+
+permissions:
+  contents: write
+
+jobs: 
+  cloudflare-page-deploy:
+    name: cloudflare page 发布工作
+    runs-on: ubuntu-latest
+    steps:
+      - name: 读取仓库内容 👀
+        uses: actions/checkout@v4
+      - name: 安装依赖 + 构建文档 📚
+        run: |
+          yarn install
+          yarn build
+      - name: 部署 github page 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+      - name: 部署 cloudflare page 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: cf-pages
+          folder: dist
